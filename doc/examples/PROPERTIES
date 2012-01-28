@@ -1,0 +1,41 @@
+# file properties
+workingDirectory=
+outputDirectory=
+namePrefix=
+vectorFileName=
+templateFileName=
+isNormalized=true|false
+randomSeed=
+sparseData= # true|false, usually true for text data
+
+# grid properties
+gridLayout=triangular | rectangular | hexagonal
+gridTopology=planar | cylindrical | toroid | spherical
+
+#numCacheBlocks= # not used
+
+
+# database properties
+useDatabase= # true|false, enables reading input and template vector from the database
+databaseServerAddress= # server IP or name; defaults to 'localhost' if missing
+databaseName= # name of the database to use; required
+databaseUser= # username to access the database; defaults to 'root' if missing
+databasePassword= # password to access the database; defaults to '' (empty password) if missing
+databaseTableNamePrefix= # prefix to prepend to all tables generated; required, should be changed per collection
+
+
+#som properties
+xSize=
+ySize=
+learnrate=
+sigma=
+tau=
+metricName=
+growthQualityMeasureName=
+numIterations=          # or numCycles
+numCycles=              # or numIterations
+
+#ghsom properties (inkl. som properties)
+tau2=
+expandQualityMeasureName=
+# reIndex=false|true    # not used at the moment

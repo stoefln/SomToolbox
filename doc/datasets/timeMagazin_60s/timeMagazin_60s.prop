@@ -1,0 +1,13 @@
+outputDirectory=output-timeMagazin_60s
+namePrefix=timeMagazin_60s
+vectorFileName=timeMagazin_60s.vec
+templateFileName=timeMagazin_60s.tv
+isNormalized=false
+randomSeed=7
+workingDirectory = ./
+
+xSize=10
+ySize=10
+learnrate=0.7
+sigma=7
+numCycles=15
