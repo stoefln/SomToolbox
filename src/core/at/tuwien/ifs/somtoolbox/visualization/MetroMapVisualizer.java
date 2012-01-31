@@ -59,6 +59,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
@@ -352,7 +353,6 @@ public class MetroMapVisualizer extends AbstractBackgroundImageVisualizer {
         // we do this every time now, check for existing binCentres and correct sizes
         // thereof inside computeFinalComponentLines
         binCentres = computeFinalComponentLines(layer);
-
         BufferedImage res = createOverlayVisualisation(width, height);
         Graphics2D g = (Graphics2D) res.getGraphics();
 
@@ -1592,6 +1592,15 @@ public class MetroMapVisualizer extends AbstractBackgroundImageVisualizer {
             displayPanel.add(UiUtils.makeAndFillPanel(boxSnapping, overlayLabel, overlayVisualisationComboBox), gbc);
             displayPanel.add(UiUtils.makeAndFillPanel(thicknessLabel, thickNessSpinner), gbc.nextRow());
 
+            JTextArea text = new JTextArea("Testfield");
+            text.setText("blabla\ncccc");
+            text.setColumns(30);
+            text.setRows(15);
+            distanceAndBinsPanel.add(text);
+            TitledCollapsiblePanel infoPanel = new TitledCollapsiblePanel("Info", new GridBagLayout());
+            infoPanel.add(UiUtils.makeAndFillPanel(text), gbc);
+            // displayPanel.add(UiUtils.makeAndFillPanel(thicknessLabel, thickNessSpinner), gbc.nextRow());
+
             /* component aggregation panel */
             // no aggregation
             buttonAggregationNone = new JRadioButton(Mode.NONE.displayName);
@@ -1767,6 +1776,7 @@ public class MetroMapVisualizer extends AbstractBackgroundImageVisualizer {
 
             metroPanel.add(distanceAndBinsPanel, constr);
             metroPanel.add(displayPanel, constr.nextRow());
+            metroPanel.add(infoPanel, constr.nextRow());
             metroPanel.add(aggregationPanel, constr.nextRow());
             metroPanel.add(selectionPanel, constr.nextRow());
             metroPanel.add(colourLegendScrollPane, constr.nextRow());

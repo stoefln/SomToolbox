@@ -1,0 +1,14 @@
+namePrefix=dataset_11
+vectorFileName=./normalised_output11.vec
+learnrate=0.7
+outputDirectory=.
+tau=1.0
+sparseData=no
+workingDirectory=.
+isNormalized=yes
+numIterations=100000
+randomSeed=7
+templateFileName=./dataset_11.tv
+xSize=36
+ySize=24
+

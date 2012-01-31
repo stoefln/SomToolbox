@@ -1,0 +1,37 @@
+$TYPE som
+$GRID_TOPOLOGY planar
+$GRID_LAYOUT rectangular
+$XDIM 36
+$YDIM 24
+$ZDIM 1
+$VEC_DIM 10
+$STORAGE_DATE 23.11.11 16:04
+$TRAINING_TIME 
+$LEARNRATE_TYPE exponential
+$LEARNRATE_INIT 0.7
+$NEIGHBORHOOD_TYPE exponential
+$NEIGHBORHOOD_INIT 18.0
+$RAND_INIT 7
+$ITERATIONS_TOTAL 100000
+$NR_TRAINVEC_TOTAL 1695
+$ADAPTIVE_COORDINATES_THRESHOLD 
+$VEC_NORMALIZED true
+$QUANTERROR_MAP 0.09181443623029417
+$QUANTERROR_VEC 5.416780898542429E-5
+$URL_TRAINING_VEC /users/stephan/Studieren/Semester 17/Selbstorganisierende Systeme/UE1/./normalised_output11.vec
+$URL_TRAINING_VEC_DESCR 
+$URL_WEIGHT_VEC /users/stephan/Studieren/Semester 17/Selbstorganisierende Systeme/UE1/./dataset_11.wgt
+$URL_QUANTERR_MAP 
+$URL_MAPPED_INPUT_VEC 
+$URL_MAPPED_INPUT_VEC_DESCR 
+$URL_UNIT_DESCR /users/stephan/Studieren/Semester 17/Selbstorganisierende Systeme/UE1/./dataset_11.unit
+$URL_TEMPLATE_VECTOR /users/stephan/Studieren/Semester 17/Selbstorganisierende Systeme/UE1/./dataset_11.tv
+$URL_DATA_WINNER_MAPPING /users/stephan/Studieren/Semester 17/Selbstorganisierende Systeme/UE1/./dataset_11.dwm
+$URL_CLASS_INFO 
+$URL_LABELS 
+$METRIC at.tuwien.ifs.somtoolbox.layers.metrics.L2Metric
+$LAYER_REVISION $Revision: 3978 $
+$DESCRIPTION 
+$AVAILABLE_VIS 
+$DATA_TYPE 
+$DATA_DIM 
