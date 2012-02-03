@@ -38,12 +38,14 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -1492,6 +1494,104 @@ public class MetroMapVisualizer extends AbstractBackgroundImageVisualizer {
         return items;
     }
 
+    private String generateDescription() {
+        String result = "";
+        if (binCentres == null) {
+            return "asdf";
+        }
+        Locale.setDefault(Locale.ENGLISH);
+        DecimalFormat df = new DecimalFormat("#.##");
+
+        for (int lineIndex = 0; lineIndex < binCentres.length; lineIndex++) {
+            // if selection -> only describe selected lines
+            if (ArrayUtils.isEmpty(selectedComponentIndices)
+                    || ArrayUtils.contains(selectedComponentIndices, lineIndex)) {
+
+                Double lineMaxX = Double.MIN_VALUE, lineMaxY = Double.MIN_VALUE, lineMinX = Double.MAX_VALUE, lineMinY = Double.MAX_VALUE;
+                Point2D min = null, max = null; // extremas
+                for (int stopIndex = 0; stopIndex < binCentres[lineIndex].length; stopIndex++) {
+
+                    Point2D stop = binCentres[lineIndex][stopIndex];
+                    if (stop.getX() > lineMaxX) {
+                        lineMaxX = stop.getX();
+                    }
+                    if (stop.getX() < lineMinX) {
+                        lineMinX = stop.getX();
+                    }
+                    if (stop.getY() > lineMaxY) {
+                        lineMaxY = stop.getY();
+                        min = stop;
+                    }
+                    if (stop.getY() < lineMinY) {
+                        lineMinY = stop.getY();
+                        max = stop;
+                    }
+
+                }
+                result += getComponentName(lineIndex) + ": \n";
+                result += "-------------------------\n";
+                if (max != null && min != null) {
+                    result += "Extremum (min): " + df.format(min.getX()) + ", " + df.format(min.getY()) + "\n";
+                    result += "Extremum (max): " + df.format(max.getX()) + ", " + df.format(max.getY()) + "\n";
+                }
+                result += "Bounding rectangle: " + "(" + df.format(lineMinX) + ", " + df.format(lineMinY) + "), " + "("
+                        + df.format(lineMaxX) + ", " + df.format(lineMaxY) + ")" + "\n";
+
+                result += "Most correlating line: " + getComponentName(findMostSimilarLine(lineIndex)) + "\n";
+                result += "Least correlating line: " + getComponentName(findLeastSimilarLine(lineIndex)) + "\n";
+                result += "\n";
+            }
+        }
+        return result;
+    }
+
+    private int findMostSimilarLine(int lineIndex) {
+        int minIndex = 0;
+        double minDistance = Double.MAX_VALUE;
+        int i = 0;
+        Point2D[] line1 = binCentres[lineIndex];
+        for (Point2D[] line2 : binCentres) {
+            if (lineIndex != i) {
+                double distance = calculateDistance(line1, line2);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    minIndex = i;
+                }
+            }
+            i++;
+        }
+        return minIndex;
+    }
+
+    private int findLeastSimilarLine(int lineIndex) {
+        int maxIndex = 0;
+        double maxDistance = Double.MIN_VALUE;
+        int i = 0;
+        Point2D[] line1 = binCentres[lineIndex];
+        for (Point2D[] line2 : binCentres) {
+            if (lineIndex != i) {
+                double distance = calculateDistance(line1, line2);
+                if (distance > maxDistance) {
+                    maxDistance = distance;
+                    maxIndex = i;
+                }
+            }
+            i++;
+        }
+        return maxIndex;
+    }
+
+    private Double calculateDistance(Point2D[] line1, Point2D[] line2) {
+        int i = 0;
+        double totalDistance = 0d;
+        for (Point2D p1 : line1) {
+            Point2D p2 = line2[i];
+            totalDistance += Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2));
+            i++;
+        }
+        return totalDistance;
+    }
+
     /*
      * private int getComponentIndex(String label) { if (inputObjects != null && inputObjects.getTemplateVector() != null) { return
      * inputObjects.getTemplateVector().getIndex(label); } else { // assume generated component name String s =
@@ -1538,6 +1638,8 @@ public class MetroMapVisualizer extends AbstractBackgroundImageVisualizer {
         private JScrollPane colourLegendScrollPane;
 
         JComboBox distanceFunctionComboBox;
+
+        private JTextArea descriptionField;
 
         /**
          * Constructs a new metro-map control panel
@@ -1592,13 +1694,12 @@ public class MetroMapVisualizer extends AbstractBackgroundImageVisualizer {
             displayPanel.add(UiUtils.makeAndFillPanel(boxSnapping, overlayLabel, overlayVisualisationComboBox), gbc);
             displayPanel.add(UiUtils.makeAndFillPanel(thicknessLabel, thickNessSpinner), gbc.nextRow());
 
-            JTextArea text = new JTextArea("Testfield");
-            text.setText("blabla\ncccc");
-            text.setColumns(30);
-            text.setRows(15);
-            distanceAndBinsPanel.add(text);
+            descriptionField = new JTextArea("Description");
+            descriptionField.setColumns(30);
+            descriptionField.setRows(15);
+            distanceAndBinsPanel.add(descriptionField);
             TitledCollapsiblePanel infoPanel = new TitledCollapsiblePanel("Info", new GridBagLayout());
-            infoPanel.add(UiUtils.makeAndFillPanel(text), gbc);
+            infoPanel.add(UiUtils.makeAndFillPanel(descriptionField), gbc);
             // displayPanel.add(UiUtils.makeAndFillPanel(thicknessLabel, thickNessSpinner), gbc.nextRow());
 
             /* component aggregation panel */
@@ -1901,6 +2002,7 @@ public class MetroMapVisualizer extends AbstractBackgroundImageVisualizer {
             binCentres = computeFinalComponentLines(gsom.getLayer());
             // TODO put rest in here
             reInitVis();
+            descriptionField.setText(generateDescription());
         }
 
         @Override
