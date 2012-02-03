@@ -379,6 +379,7 @@ public class MetroMapVisualizer extends AbstractBackgroundImageVisualizer {
             createLayout(g, layer, false);
             createSnappedMetroLayout(g, layer);
         }
+        metroMapControlPanel.descriptionField.setText(generateDescription());
         return res;
     }
 
@@ -402,6 +403,7 @@ public class MetroMapVisualizer extends AbstractBackgroundImageVisualizer {
         drawLine(g, component, layer.getBinCentres(numberOfBins));
 
         VisualisationUtils.drawUnitGrid((Graphics2D) res.getGraphics(), gsom, width, height);
+        metroMapControlPanel.descriptionField.setText(generateDescription());
         return res;
     }
 
@@ -1148,6 +1150,7 @@ public class MetroMapVisualizer extends AbstractBackgroundImageVisualizer {
         if (snapping) {
             binCentres = doSnapping(binCentres, layer);
         }
+        metroMapControlPanel.descriptionField.setText(generateDescription());
         return binCentres;
     }
 
