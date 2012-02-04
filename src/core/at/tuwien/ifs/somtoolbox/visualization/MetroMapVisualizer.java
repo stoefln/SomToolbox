@@ -1549,18 +1549,18 @@ public class MetroMapVisualizer extends AbstractBackgroundImageVisualizer {
 
                 result += "Description:\n";
                 result += getComponentName(lineIndex) + " starts in the " + getSector(lineIndex, 0)
-                        + " part of the map"; // TODO: get startposition
+                        + " part of the map";
 
                 for (int i = 1; i < binCentres[lineIndex].length - 1; i++) {
                     if (angles[i] < 0) {
-                        result += ",\nthen turns right by " + Math.abs(angles[i]) + " degrees";
+                        result += ",\nthen turns right by " + df.format(Math.abs(angles[i])) + " degrees";
                     } else {
-                        result += ",\nthen turns left by " + Math.abs(angles[i]) + " degrees";
+                        result += ",\nthen turns left by " + df.format(Math.abs(angles[i])) + " degrees";
                     }
                 }
                 result += "\nand ends in the " + getSector(lineIndex, binCentres[lineIndex].length - 1)
-                        + " of the map."; // TODO: get endposition
-                result += "\n";
+                        + " of the map.";
+                result += "\n\n";
             }
         }
         return result;
