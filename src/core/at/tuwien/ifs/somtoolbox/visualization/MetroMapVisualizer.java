@@ -1512,7 +1512,10 @@ public class MetroMapVisualizer extends AbstractBackgroundImageVisualizer {
 
                 Double lineMaxX = Double.MIN_VALUE, lineMaxY = Double.MIN_VALUE, lineMinX = Double.MAX_VALUE, lineMinY = Double.MAX_VALUE;
                 Point2D min = null, max = null; // extremas
+                double angles[] = new double[binCentres[lineIndex].length];
                 for (int stopIndex = 0; stopIndex < binCentres[lineIndex].length; stopIndex++) {
+
+                    angles[stopIndex] = calculateNextAngle(lineIndex, stopIndex);
 
                     Point2D stop = binCentres[lineIndex][stopIndex];
                     if (stop.getX() > lineMaxX) {
@@ -1542,6 +1545,21 @@ public class MetroMapVisualizer extends AbstractBackgroundImageVisualizer {
 
                 result += "Most correlating line: " + getComponentName(findMostSimilarLine(lineIndex)) + "\n";
                 result += "Least correlating line: " + getComponentName(findLeastSimilarLine(lineIndex)) + "\n";
+                result += "\n";
+
+                result += "Description:\n";
+                result += getComponentName(lineIndex) + " starts in the " + getSector(lineIndex, 0)
+                        + " part of the map"; // TODO: get startposition
+
+                for (int i = 1; i < binCentres[lineIndex].length - 1; i++) {
+                    if (angles[i] < 0) {
+                        result += ",\nthen turns right by " + Math.abs(angles[i]) + " degrees";
+                    } else {
+                        result += ",\nthen turns left by " + Math.abs(angles[i]) + " degrees";
+                    }
+                }
+                result += "\nand ends in the " + getSector(lineIndex, binCentres[lineIndex].length - 1)
+                        + " of the map."; // TODO: get endposition
                 result += "\n";
             }
         }
@@ -1582,6 +1600,50 @@ public class MetroMapVisualizer extends AbstractBackgroundImageVisualizer {
             i++;
         }
         return maxIndex;
+    }
+
+    private double calculateNextAngle(int line, int stop) {
+        if (stop <= 0 || stop >= binCentres[line].length - 1) {
+            return 0;
+        }
+        Point2D prev = binCentres[line][stop - 1];
+        Point2D current = binCentres[line][stop];
+        Point2D next = binCentres[line][stop + 1];
+
+        double ang1 = calculateLineAngle(prev, current);
+        double ang2 = calculateLineAngle(current, next);
+
+        return ang2 - ang1;
+    }
+
+    private String getSector(int line, int stop) {
+        double x = binCentres[line][stop].getX();
+        double y = binCentres[line][stop].getY();
+        double mX = gsom.getLayer().getXSize() / 2;
+        double mY = gsom.getLayer().getYSize() / 2;
+        String res = "";
+        if (y < mY) {
+            res = "top ";
+        } else {
+            res = "bottom ";
+        }
+        if (x < mX) {
+            res += "left";
+        } else {
+            res += "right";
+        }
+        return res;
+    }
+
+    private double calculateLineAngle(Point2D start, Point2D end) {
+        double dx = end.getX() - start.getX();
+        double dy = end.getY() - start.getY();
+
+        if (dx < 0) {
+
+        }
+        double ang = Math.atan2(-dy, dx);
+        return Math.toDegrees(ang);
     }
 
     private Double calculateDistance(Point2D[] line1, Point2D[] line2) {
